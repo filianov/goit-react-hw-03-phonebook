@@ -16,6 +16,17 @@ export default class App extends Component {
     filter: '',
   };
 
+  componentDidMount() {
+    // console.log("Cotacts componentDidMount");
+    const savedLSC = localStorage.getItem('contacts');
+    if (savedLSC) { this.setState({ contacts: JSON.parse(savedLSC), }); }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    // console.log('contacts componentDidUpdate');
+    if (prevState.contacts !== this.state.contacts) { localStorage.setItem('contacts', JSON.stringify(this.state.contacts)) }
+  }
+
   addContact = (name, number) => {
     const uuid = uuidv4();
     const contact = {
@@ -65,11 +76,11 @@ export default class App extends Component {
             onRemoveContact={this.removeContact}
           />
         ) : (
-          <ContactList
-            contacts={contacts}
-            onRemoveContact={this.removeContact}
-          />
-        )}
+            <ContactList
+              contacts={contacts}
+              onRemoveContact={this.removeContact}
+            />
+          )}
       </>
     );
   }
